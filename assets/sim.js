@@ -55,7 +55,6 @@ Simulation.multiply = function(a, b){
 Simulation.draw = function () {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     for (var j = 0; j < this.v.length; j++){
-        console.log('drawing', j)
         this.ctx.beginPath();
         this.ctx.strokeStyle=this.securityColor[j];
         var vj = this.v[j]
@@ -65,7 +64,6 @@ Simulation.draw = function () {
         }
         this.ctx.stroke();
     }
-    console.log('drawing')
 };
 Simulation.update = function () {
     // hard coding of three assets
@@ -94,7 +92,6 @@ Simulation.update = function () {
         [0,  0, .9061],
     ]
     e_corr = this.multiply(e, U)
-    console.log(e_corr)
     // a Weiner process
     dW1 = e_corr[1][0] * Math.sqrt(dt);
     dW2 = e_corr[1][1] * Math.sqrt(dt);
