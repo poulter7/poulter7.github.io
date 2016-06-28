@@ -1,0 +1,9 @@
+[submodule "submodules/gaussian"]
+	path = submodules/gaussian
+	url = https://github.com/errcw/gaussian.git
+[submodule "submodules/requirejs"]
+	path = submodules/requirejs
+	url = https://github.com/requirejs/requirejs
+[submodule "submodules/mathjs"]
+	path = submodules/mathjs
+	url = https://github.com/josdejong/mathjs
