@@ -7,7 +7,7 @@
 
     function resizeCanvas() {
             canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight - 300
+            canvas.height = 300
 
             /**
              * Your drawings need to be inside this function otherwise they will be reset when 
@@ -33,7 +33,7 @@ Simulation.initialize = function () {
     this.v1_drift = 30
     this.canvas = document.getElementById("canvas")
     this.ctx = this.canvas.getContext("2d");
-    this.y_offset = this.canvas.height/3.; 
+    this.y_offset = this.canvas.height/2.; 
     this.x_scale = 2;
     this.ctx.lineWidth = 2;
     this.ctx.lineCap='square'
