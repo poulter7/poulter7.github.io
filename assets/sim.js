@@ -7,7 +7,7 @@
 
     function resizeCanvas() {
             canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.height = window.innerHeight - 300
 
             /**
              * Your drawings need to be inside this function otherwise they will be reset when 
@@ -33,7 +33,11 @@ Simulation.initialize = function () {
     this.v1_drift = 30
     this.canvas = document.getElementById("canvas")
     this.ctx = this.canvas.getContext("2d");
-    this.y_offset = this.canvas.height/4.; 
+    this.y_offset = this.canvas.height/3.; 
+    this.x_scale = 2;
+    this.ctx.lineWidth = 2;
+    this.ctx.lineCap='square'
+    this.ctx.lineJoin = 'bevel'
     this.securityColor = ["#9A9932", "#EB4345", "#19699A"]
 };
 Simulation.multiply = function(a, b){
@@ -60,7 +64,7 @@ Simulation.draw = function () {
         var vj = this.v[j]
         this.ctx.moveTo(0, this.y_offset)
         for (var i = 0; i < vj.length; i++) {
-            this.ctx.lineTo(i, (-vj[i] + this.y_offset));
+            this.ctx.lineTo(i*this.x_scale, (-vj[i] + this.y_offset));
         }
         this.ctx.stroke();
     }
@@ -72,7 +76,7 @@ Simulation.update = function () {
     sigma2 = sigma * 1.4
     sigma3 = sigma
     mu = this.v1_drift
-    dt = 0.001
+    dt = 0.002
     // random normal variable
     e1 = distribution[0].ppf(Math.random())
     e2 = distribution[1].ppf(Math.random())
@@ -114,9 +118,9 @@ Simulation.update = function () {
     this.v[2].push(X_t3)
 
     // if this path goes past the end of the canvas restart the simulation
-    if (this.v[0].length > this.canvas.width) { this.v[0] = [0] }
-    if (this.v[1].length > this.canvas.width) { this.v[1] = [0] }
-    if (this.v[2].length > this.canvas.width) { this.v[2] = [0] }
+    if (this.v[0].length > this.canvas.width/this.x_scale) { this.v[0] = [0] }
+    if (this.v[1].length > this.canvas.width/this.x_scale) { this.v[1] = [0] }
+    if (this.v[2].length > this.canvas.width/this.x_scale) { this.v[2] = [0] }
 };
 Simulation.initialize();
 
