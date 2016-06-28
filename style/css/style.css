@@ -36,6 +36,7 @@ body {
     font-style: normal;
 }
 
+
 .symbol, a.symbol:before {
     font-family: 'Mono Social Icons Font';
     -webkit-text-rendering: optimizeLegibility;
@@ -54,4 +55,6 @@ a.symbol:before {
     content: attr(title);
     margin-right: 0.3em;
     font-size: 130%;
+    text-decoration: none;
+    display: inline-block;
 }
