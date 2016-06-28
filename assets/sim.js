@@ -23,7 +23,7 @@
 })();
 var Simulation = {};
 
-Simulation.fps = 100;
+Simulation.fps = 60;
 var distribution = [gaussian(0, 1), gaussian(0, 1), gaussian(0, 1)];
 
 Simulation.initialize = function () {
