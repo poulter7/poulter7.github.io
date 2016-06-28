@@ -23,10 +23,10 @@
 })();
 var Simulation = {};
 
-Simulation.fps = 60;
 var distribution = [gaussian(0, 1), gaussian(0, 1), gaussian(0, 1)];
 
 Simulation.initialize = function () {
+
     this.entities = [];
     this.v = [[], [], []]
     this.v1_vol = 60
@@ -39,6 +39,7 @@ Simulation.initialize = function () {
     this.ctx.lineCap='square'
     this.ctx.lineJoin = 'bevel'
     this.securityColor = ["#9A9932", "#EB4345", "#19699A"]
+    this.fps = (this.canvas.width)/(8*this.x_scale);
 };
 Simulation.multiply = function(a, b){
     r = new Array(a.length)
