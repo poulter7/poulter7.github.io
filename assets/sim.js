@@ -39,7 +39,7 @@ Simulation.initialize = function () {
     this.ctx.lineCap='square'
     this.ctx.lineJoin = 'bevel'
     this.securityColor = ["#9A9932", "#EB4345", "#19699A"]
-    this.fps = (this.canvas.width)/(8*this.x_scale);
+    this.fps = 40;
 };
 Simulation.multiply = function(a, b){
     r = new Array(a.length)
