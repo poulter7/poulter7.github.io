@@ -33,11 +33,6 @@ Simulation.initialize = function () {
     this.v1_drift = 30
     this.canvas = document.getElementById("canvas")
     this.ctx = this.canvas.getContext("2d");
-    this.y_offset = this.canvas.height/2.; 
-    this.x_scale = 2;
-    this.ctx.lineWidth = 2;
-    this.ctx.lineCap='square'
-    this.ctx.lineJoin = 'bevel'
     this.securityColor = ["#9A9932", "#EB4345", "#19699A"]
     this.fps = 40;
 };
@@ -58,6 +53,11 @@ Simulation.multiply = function(a, b){
     
 }
 Simulation.draw = function () {
+    this.x_scale = 2;
+    this.y_offset = this.canvas.height/2.; 
+    this.ctx.lineWidth = 2;
+    this.ctx.lineCap='square'
+    this.ctx.lineJoin = 'bevel'
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     for (var j = 0; j < this.v.length; j++){
         this.ctx.beginPath();

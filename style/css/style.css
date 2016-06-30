@@ -5,6 +5,17 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+  font-family: 'Montserrat', sans-serif;
+    -webkit-text-rendering: optimizeLegibility;
+    -moz-text-rendering: optimizeLegibility;
+    -ms-text-rendering: optimizeLegibility;
+    -o-text-rendering: optimizeLegibility;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -ms-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
+    font-smoothing: antialiased;
 }
 .footer {
   position: absolute;
@@ -13,6 +24,19 @@ body {
   /* Set the fixed height of the footer here */
   height: 60px;
   background-color: #f5f5f5;
+  text-align: center;
+}
+#header {
+  text-align: center;
+}
+.name {
+  font-family: 'Lora';
+  font-weight: bold;
+  font-size: 45px;
+}
+
+.line {
+  display: inline-block;
 }
 
 .container {
@@ -35,23 +59,10 @@ body {
     font-weight: normal;
     font-style: normal;
 }
-
-
-.symbol, a.symbol:before {
-    font-family: 'Mono Social Icons Font';
-    -webkit-text-rendering: optimizeLegibility;
-    -moz-text-rendering: optimizeLegibility;
-    -ms-text-rendering: optimizeLegibility;
-    -o-text-rendering: optimizeLegibility;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-font-smoothing: antialiased;
-    -ms-font-smoothing: antialiased;
-    -o-font-smoothing: antialiased;
-    font-smoothing: antialiased;
-}
+@import 'https://fonts.googleapis.com/css?family=Lora|Montserrat:700';
 
 a.symbol:before {
+    font-family: 'Mono Social Icons Font';
     content: attr(title);
     margin-right: 0.3em;
     font-size: 130%;
