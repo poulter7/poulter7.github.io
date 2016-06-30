@@ -7,7 +7,7 @@
 
     function resizeCanvas() {
             canvas.width = window.innerWidth;
-            canvas.height = 300
+            canvas.height = window.innerHeight-300;
 
             /**
              * Your drawings need to be inside this function otherwise they will be reset when 
@@ -26,7 +26,6 @@ var Simulation = {};
 var distribution = [gaussian(0, 1), gaussian(0, 1), gaussian(0, 1)];
 
 Simulation.initialize = function () {
-
     this.entities = [];
     this.v = [[], [], []]
     this.v1_vol = 60
