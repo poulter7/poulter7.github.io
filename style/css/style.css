@@ -72,3 +72,8 @@ a.symbol:before {
     text-decoration: none;
     display: inline-block;
 }
+
+#controls{
+  width: 50%; 
+  margin: 0 auto
+}

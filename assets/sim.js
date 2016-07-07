@@ -35,22 +35,6 @@ Simulation.initialize = function () {
     this.securityColor = ["#9A9932", "#EB4345", "#19699A"]
     this.fps = 40;
 };
-Simulation.multiply = function(a, b){
-    r = new Array(a.length)
-    for (var i=0; i < a.length; i++){
-        v = new Array()
-        for (var j=0; j < b[0].length; j++){
-            sum = 0;
-            for (var k=0; k < a[0].length; k++){
-                sum += a[i][k] * b[k][j]
-            }
-            v.push(sum)
-        }
-        r.push(v)
-    }
-    return r
-    
-}
 Simulation.draw = function () {
     this.x_scale = 2;
     this.y_offset = this.canvas.height/2.; 
@@ -78,10 +62,6 @@ Simulation.update = function () {
     mu = this.v1_drift
     dt = 0.002
     // random normal variable
-    e1 = distribution[0].ppf(Math.random())
-    e2 = distribution[1].ppf(Math.random())
-    e3 = distribution[2].ppf(Math.random())
-    e = [[e1, e2, e3]]
 
     // make the random processes correlated
     // http://www.sitmo.com/article/generating-correlated-random-numbers/
@@ -90,37 +70,34 @@ Simulation.update = function () {
         [0, .8, .4],
         [0,  0, .866],
     ]
-    U = [
+    U = math.matrix([
         [1, .9, .4],
         [0, .4359, -0.1376],
         [0,  0, .9061],
-    ]
-    e_corr = this.multiply(e, U)
+    ])
+
+
     // a Weiner process
-    dW1 = e_corr[1][0] * Math.sqrt(dt);
-    dW2 = e_corr[1][1] * Math.sqrt(dt);
-    dW3 = e_corr[1][2] * Math.sqrt(dt);
+    c = 3
 
-    // a generalized Wiener process has a drift term
-    dX1 = mu * dt + sigma1 * dW1
-    dX2 = mu * dt + sigma2 * dW2
-    dX3 = mu * dt + sigma3 * dW3
+    e = [[]]
+    for (var i=0; i<c; i++){
+        e[0].push(distribution[i].ppf(Math.random()))
+    }
+    e_corr = math.multiply(e, U)
+    for (var i=0; i<c; i++){
+        dW = e_corr._data[0][i] * Math.sqrt(dt);
 
-    // step
-    if (this.v[0].length == 0){this.v[0] = [0]}
-    if (this.v[1].length == 0){this.v[1] = [0]}
-    if (this.v[2].length == 0){this.v[2] = [0]}
-    X_t1 = this.v[0][this.v[0].length - 1] + dX1
-    X_t2 = this.v[1][this.v[1].length - 1] + dX2
-    X_t3 = this.v[2][this.v[2].length - 1] + dX3
-    this.v[0].push(X_t1)
-    this.v[1].push(X_t2)
-    this.v[2].push(X_t3)
+        // a generalized Wiener process has a drift term
+        dX = mu * dt + sigma1 * dW
+        // step
+        if (this.v[i].length == 0){this.v[i] = [0]}
+        X_t = this.v[i][this.v[i].length - 1] + dX
+        this.v[i].push(X_t)
 
-    // if this path goes past the end of the canvas restart the simulation
-    if (this.v[0].length > this.canvas.width/this.x_scale) { this.v[0] = [0] }
-    if (this.v[1].length > this.canvas.width/this.x_scale) { this.v[1] = [0] }
-    if (this.v[2].length > this.canvas.width/this.x_scale) { this.v[2] = [0] }
+        // if this path goes past the end of the canvas restart the simulation
+        if (this.v[i].length > this.canvas.width/this.x_scale) { this.v[i] = [0] }
+    }
 };
 Simulation.initialize();
 
