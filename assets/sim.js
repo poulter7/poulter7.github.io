@@ -59,7 +59,8 @@ Simulation.update = function () {
     sigma1 = sigma
     sigma2 = sigma * 1.4
     sigma3 = sigma
-    mu = this.v1_drift
+    sigma = math.matrix([sigma1, sigma2, sigma3])
+    mu = math.matrix([this.v1_drift, this.v1_drift, this.v1_drift])
     dt = 0.002
     // random normal variable
 
@@ -80,19 +81,22 @@ Simulation.update = function () {
     // a Weiner process
     c = 3
 
-    e = [[]]
-    for (var i=0; i<c; i++){
-        e[0].push(distribution[i].ppf(Math.random()))
-    }
-    e_corr = math.multiply(e, U)
-    for (var i=0; i<c; i++){
-        dW = e_corr._data[0][i] * Math.sqrt(dt);
+    // Generate some random numbers
+    e = _.range(c).map(i=>distribution[i].ppf(Math.random()))
 
-        // a generalized Wiener process has a drift term
-        dX = mu * dt + sigma1 * dW
-        // step
+    // Correlate them
+    e_corr = math.multiply(e, U)
+    dW = math.multiply(e_corr, Math.sqrt(dt));
+    // Create a generalized Wiener process has 
+    // a drift term and a stochastic term
+    drift = math.multiply(mu, dt)
+    vol = math.dotMultiply(sigma, dW)
+    dX = math.add(drift, vol)
+
+    // step forwards in the simulation
+    for (var i=0; i<c; i++){
         if (this.v[i].length == 0){this.v[i] = [0]}
-        X_t = this.v[i][this.v[i].length - 1] + dX
+        X_t = this.v[i][this.v[i].length - 1] + dX._data[i]
         this.v[i].push(X_t)
 
         // if this path goes past the end of the canvas restart the simulation
