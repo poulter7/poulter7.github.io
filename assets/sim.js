@@ -6,8 +6,9 @@
     window.addEventListener('resize', resizeCanvas, false);
 
     function resizeCanvas() {
+        console.log(window.width)
             canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight-300;
+            canvas.height = window.innerHeight;
 
             /**
              * Your drawings need to be inside this function otherwise they will be reset when 
@@ -75,7 +76,7 @@ Simulation.initializeSimulation = function() {
 };
 Simulation.draw = function () {
     this.x_scale = 2;
-    this.y_offset = this.canvas.height/2.; 
+    this.y_offset = this.canvas.height/1.5; 
     this.ctx.lineWidth = 2;
     this.ctx.lineCap='square'
     this.ctx.lineJoin = 'bevel'
@@ -88,6 +89,7 @@ Simulation.draw = function () {
         for (var i = 0; i < vj.length; i++) {
             this.ctx.lineTo(0.5+i*this.x_scale, (0.5-vj[i] + this.y_offset));
         }
+        console.log(0.5+i*this.x_scale, (0.5-vj[i] + this.y_offset));
         this.ctx.stroke();
     }
 };

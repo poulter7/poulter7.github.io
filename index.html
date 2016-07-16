@@ -23,31 +23,33 @@
     <!-- End Google Analytics -->
 </head>
 <body>
-    <div id="header" class="container">
-        <div class="page-header">
-          <h1 class="name">JONATHAN POULTER</h1>
+    <canvas id="canvas"></canvas>
+    <div id="page">
+        <div id="header" class="container">
+            <div class="page-header">
+              <h1 class="name">JONATHAN POULTER</h1>
+            </div>
+            <p class="lead">Quantitative Analyst</br>Bank of America Merrill Lynch, New York</p>
         </div>
-        <p class="lead">Quantitative Analyst</br>Bank of America Merrill Lynch, New York</p>
+        <div id="controls">
+            <div class="control_block">
+                Asset Count: <span id="asset_count">3</span>
+                <div><button class="nudge_button" id="increase_asset_count">+</button> <button class="nudge_button" id="decrease_asset_count">-</button></div>
+            </div>
+        </div>
+        <script data-main="assets/sim.js" src="./submodules/requirejs/require.js"></script>
+        <footer id="footer" class="footer">
+            <div class="container">
+                <p class="text-muted">
+                <span class="line">Find me at: &nbsp;</span>
+                <span class="line">
+                <a href='https://www.linkedin.com/in/jonathanpoulter' class='symbol' title='&#xe452'>LinkedIn</a>
+                &nbsp;
+                <a href='https://github.com/poulter7' class='symbol' title='&#xe436;'>Github</a>
+                </span>
+                </p>
+            </div>
+        </footer>
     </div>
-    <div id="controls">
-        <div class="control_block">
-            Asset Count: <span id="asset_count">3</span>
-            <div><button class="nudge_button" id="increase_asset_count">+</button> <button class="nudge_button" id="decrease_asset_count">-</button></div>
-        </div>
-    </div>
-    <canvas id="canvas" width="640" height="260"></canvas>
-    <script data-main="assets/sim.js" src="./submodules/requirejs/require.js"></script>
-    <footer id="footer" class="footer">
-        <div class="container">
-            <p class="text-muted">
-            <span class="line">Find me at: &nbsp;</span>
-            <span class="line">
-            <a href='https://www.linkedin.com/in/jonathanpoulter' class='symbol' title='&#xe452'>LinkedIn</a>
-            &nbsp;
-            <a href='https://github.com/poulter7' class='symbol' title='&#xe436;'>Github</a>
-            </span>
-            </p>
-        </div>
-    </footer>
 </body>
 </html>

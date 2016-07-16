@@ -60,6 +60,9 @@ body {
 }
 @import 'https://fonts.googleapis.com/css?family=Lora|Montserrat:700';
 
+#page > div, p {
+  background-color: rgba(255, 255, 255, 0.5);
+}
 a.symbol:before {
     font-family: 'Mono Social Icons Font';
     content: attr(title);
@@ -68,7 +71,10 @@ a.symbol:before {
     text-decoration: none;
     display: inline-block;
 }
-
+#canvas {
+  position:fixed; top:0;left:0;
+  z-index:-1;
+}
 #controls{
   width: 50%; 
   margin: auto;
