@@ -75,5 +75,18 @@ a.symbol:before {
 
 #controls{
   width: 50%; 
-  margin: 0 auto
+  margin: auto;
+  text-align: center;
+}
+.control_block{
+  display: inline-block;
+}
+
+.nudge_button {
+  background-color: #008CBA;
+  color: #fff;
+  border: none;
+  width: 3em;
+  height: 3em;
+  margin: 2px;
 }

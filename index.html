@@ -30,7 +30,10 @@
         <p class="lead">Quantitative Analyst</br>Bank of America Merrill Lynch, New York</p>
     </div>
     <div id="controls">
-        Asset Count: <span id="asset_count">3</span> <button class="nudge_botton" id="increase_asset_count">+</button><button class="nudge_botton" id="decrease_asset_count">-</button>
+        <div class="control_block">
+            Asset Count: <span id="asset_count">3</span>
+            <div><button class="nudge_button" id="increase_asset_count">+</button> <button class="nudge_button" id="decrease_asset_count">-</button></div>
+        </div>
     </div>
     <canvas id="canvas"></canvas>
     <script data-main="assets/sim.js" src="./submodules/requirejs/require.js"></script>
