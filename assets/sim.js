@@ -86,7 +86,7 @@ Simulation.draw = function () {
         var vj = this.v[j]
         this.ctx.moveTo(0, this.y_offset)
         for (var i = 0; i < vj.length; i++) {
-            this.ctx.lineTo(i*this.x_scale, (-vj[i] + this.y_offset));
+            this.ctx.lineTo(0.5+i*this.x_scale, (0.5-vj[i] + this.y_offset));
         }
         this.ctx.stroke();
     }
