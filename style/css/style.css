@@ -47,10 +47,6 @@ body {
 .footer .container p{
   margin: 20px 0;
 }
-.canvas {
-  position: absolute;
-}
-
 @font-face {
     font-family: 'Mono Social Icons Font';
     src: url('../font/MonoSocialIconsFont-1.10.eot');
