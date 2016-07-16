@@ -23,17 +23,54 @@
 })();
 var Simulation = {};
 
-var distribution = [gaussian(0, 1), gaussian(0, 1), gaussian(0, 1)];
 
 Simulation.initialize = function () {
+    INITIAL_ASSET_COUNT = 3
     this.entities = [];
-    this.v = [[], [], []]
-    this.v1_vol = 60
-    this.v1_drift = 30
     this.canvas = document.getElementById("canvas")
     this.ctx = this.canvas.getContext("2d");
     this.securityColor = ["#9A9932", "#EB4345", "#19699A"]
     this.fps = 40;
+    this.n = INITIAL_ASSET_COUNT;
+    this.initializeSimulation()
+};
+Simulation.initializeSimulation = function() {
+    this.v = _.times(this.n, i => [])
+    this.distribution = _.times(this.n, i=>gaussian(0, 1));
+    A = math.matrix([
+          [1,  .09, .06, .072, -0.2448],
+          [.09,  1,    .029,  .066, .057],
+          [.06, .029,      1, -0.003, .04],
+          [.072, .066,     -0.003, 1, -0.02],
+          [-0.2448, .057, .04, -0.02, 1]
+    ])
+    L = math.matrix().resize([A.size()[0], A.size()[1]], 0)
+    for (var i=0; i < L.size()[0]; i++){
+        for (var j=0; j < i+1; j++){
+            s = 0
+            for (var k = 0; k< j; k ++){
+                s += L._data[i][k] * L._data[j][k]
+            }
+            if(i == j){
+                L._data[i][j] = math.sqrt(A._data[i][i] - s)
+            }
+            else{
+                L._data[i][j] = 1.0 / L._data[j][j] * (A._data[i][j] - s)
+            }
+        }
+    }
+    console.log(L)
+    L = math.transpose(L)
+    var sigma = 60;
+    var sigma1 = sigma;
+    var sigma2 = sigma * 1.4;
+    var sigma3 = sigma;
+    var v1_drift = 30
+    var VOL = math.matrix([sigma1, sigma2, sigma3, sigma1, sigma2])
+    var DRIFT = math.matrix([v1_drift, v1_drift, v1_drift, v1_drift, v1_drift])
+    this.sigma = VOL.resize([this.n])
+    this.mu = DRIFT.resize([this.n])
+    this.corr = L.resize([this.n, this.n])
 };
 Simulation.draw = function () {
     this.x_scale = 2;
@@ -53,40 +90,23 @@ Simulation.draw = function () {
         this.ctx.stroke();
     }
 };
+
+
 Simulation.update = function () {
-    // hard coding of three assets
-    sigma = this.v1_vol
-    sigma1 = sigma
-    sigma2 = sigma * 1.4
-    sigma3 = sigma
-    sigma = math.matrix([sigma1, sigma2, sigma3])
-    mu = math.matrix([this.v1_drift, this.v1_drift, this.v1_drift])
-    dt = 0.002
-    // random normal variable
+    dt = 0.002;
+    sigma = this.sigma;
+    n = this.n;
+    mu = this.mu;
+    corr = this.corr;
+    // a Weiner process
+    // Generate some random numbers
+    e = _.range(n).map(i=>this.distribution[i].ppf(Math.random()))
 
     // make the random processes correlated
     // http://www.sitmo.com/article/generating-correlated-random-numbers/
-    U = [
-        [1, .6, .3],
-        [0, .8, .4],
-        [0,  0, .866],
-    ]
-    U = math.matrix([
-        [1, .9, .4],
-        [0, .4359, -0.1376],
-        [0,  0, .9061],
-    ])
-
-
-    // a Weiner process
-    c = 3
-
-    // Generate some random numbers
-    e = _.range(c).map(i=>distribution[i].ppf(Math.random()))
-
-    // Correlate them
-    e_corr = math.multiply(e, U)
+    e_corr = math.multiply(e, corr)
     dW = math.multiply(e_corr, Math.sqrt(dt));
+
     // Create a generalized Wiener process has 
     // a drift term and a stochastic term
     drift = math.multiply(mu, dt)
@@ -94,7 +114,7 @@ Simulation.update = function () {
     dX = math.add(drift, vol)
 
     // step forwards in the simulation
-    for (var i=0; i<c; i++){
+    for (var i=0; i<n; i++){
         if (this.v[i].length == 0){this.v[i] = [0]}
         X_t = this.v[i][this.v[i].length - 1] + dX._data[i]
         this.v[i].push(X_t)
@@ -133,3 +153,16 @@ Simulation.run = (function () {
 })();
 
 window.onEachFrame(Simulation.run);
+
+Simulation.increaseAssetCount = function(){
+    Simulation.n=math.min(Simulation.n+1, 5);
+    document.getElementById('asset_count').value = Simulation.n
+    Simulation.initializeSimulation();
+};
+Simulation.decreaseAssetCount = function(){
+    Simulation.n=math.max(Simulation.n-1, 1);
+    document.getElementById('asset_count').value = Simulation.n
+    Simulation.initializeSimulation();
+};
+document.getElementById('increase_asset_count').onclick = Simulation.increaseAssetCount;
+document.getElementById('decrease_asset_count').onclick = Simulation.decreaseAssetCount;
