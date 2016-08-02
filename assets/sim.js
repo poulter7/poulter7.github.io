@@ -1,29 +1,19 @@
+// keep the canvas at the same size as the page
 (function() {
     var canvas = document.getElementById('canvas'),
-            context = canvas.getContext('2d');
+        context = canvas.getContext('2d');
 
     // resize the canvas to fill browser window dynamically
     window.addEventListener('resize', resizeCanvas, false);
 
     function resizeCanvas() {
-        console.log(window.width)
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-
-            /**
-             * Your drawings need to be inside this function otherwise they will be reset when 
-             * you resize the browser window and the canvas goes will be cleared.
-             */
-            drawStuff(); 
     }
     resizeCanvas();
-
-    function drawStuff() {
-            // do your drawing stuff here
-    }
 })();
-var Simulation = {};
 
+var Simulation = {};
 
 Simulation.initialize = function () {
     INITIAL_ASSET_COUNT = 3
@@ -31,10 +21,11 @@ Simulation.initialize = function () {
     this.canvas = document.getElementById("canvas")
     this.ctx = this.canvas.getContext("2d");
     this.securityColor = ["#BF3100", "#0B4FB2", "#E8E102", "#02C94C", "#A204C9"]
-    this.fps = 40;
+    this.fps = 60;
     this.n = INITIAL_ASSET_COUNT;
     this.initializeSimulation()
 };
+
 Simulation.initializeSimulation = function() {
     document.getElementById('asset_count').textContent = Simulation.n
     this.v = _.times(this.n, function(){return []});
@@ -74,26 +65,6 @@ Simulation.initializeSimulation = function() {
     this.mu = DRIFT.resize([this.n])
     this.corr = L.resize([this.n, this.n])
 };
-Simulation.draw = function () {
-    this.x_scale = 2;
-    this.y_offset = this.canvas.height/1.5; 
-    this.ctx.lineWidth = 2;
-    this.ctx.lineCap='square'
-    this.ctx.lineJoin = 'bevel'
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    for (var j = 0; j < this.v.length; j++){
-        this.ctx.beginPath();
-        this.ctx.strokeStyle=this.securityColor[j];
-        var vj = this.v[j]
-        this.ctx.moveTo(0, this.y_offset)
-        for (var i = 0; i < vj.length; i++) {
-            this.ctx.lineTo(0.5+i*this.x_scale, (0.5-vj[i] + this.y_offset));
-        }
-        console.log(0.5+i*this.x_scale, (0.5-vj[i] + this.y_offset));
-        this.ctx.stroke();
-    }
-};
-
 
 Simulation.update = function () {
     dt = 0.002;
@@ -126,44 +97,70 @@ Simulation.update = function () {
         if (this.v[i].length > this.canvas.width/this.x_scale) { this.v[i] = [0] }
     }
 };
-Simulation.initialize();
 
-Simulation.run = (function () {
-    var loops = 0, skipTicks = 1000 / Simulation.fps,
-        maxFrameSkip = 10,
-        nextSimulationTick = (new Date).getTime();
-
-    return function () {
-        loops = 0;
-
-        while ((new Date).getTime() > nextSimulationTick) {
-            Simulation.update();
-            nextSimulationTick += skipTicks;
-            loops++;
+Simulation.draw = function () {
+    this.x_scale = 2;
+    this.y_offset = this.canvas.height/1.5; 
+    this.ctx.lineWidth = 2;
+    this.ctx.lineCap='square'
+    this.ctx.lineJoin = 'bevel'
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    for (var j = 0; j < this.v.length; j++){
+        this.ctx.beginPath();
+        this.ctx.strokeStyle=this.securityColor[j];
+        var vj = this.v[j]
+        this.ctx.moveTo(0, this.y_offset)
+        for (var i = 0; i < vj.length; i++) {
+            this.ctx.lineTo(0.5+i*this.x_scale, (0.5-vj[i] + this.y_offset));
         }
+        this.ctx.stroke();
+    }
+};
+Simulation.run = function () {
+    Simulation.update();
+    Simulation.draw();
+    /*
+    x = function(d){
+       return d
+    }
+    y = function(d){
+        return d
+    }
+    var valueline = d3.line()
+        .x(function(d) { return x(d); })
+        .y(function(d) { return y(d); });
 
-        Simulation.draw();
-    };
-})();
+    d3.select('canvas')
+        .append('svg')
+        .append('g')
+        .append("path").attr("d", valueline(Simulation.v[0]))
+    */
+};
 
-(function () {
-    var onEachFrame;
-    onEachFrame = function (cb) {
-        var _cb = function () { cb(); requestAnimationFrame(_cb); }
-        _cb();
-    };
-    window.onEachFrame = onEachFrame;
-})();
+Simulation.initialize();
+d3.interval(Simulation.run, 1000/Simulation.fps)
 
-window.onEachFrame(Simulation.run);
-
-Simulation.increaseAssetCount = function(){
+document.getElementById('increase_asset_count').onclick = function(){
     Simulation.n=math.min(Simulation.n+1, 5);
     Simulation.initializeSimulation();
 };
-Simulation.decreaseAssetCount = function(){
+document.getElementById('decrease_asset_count').onclick = function(){
     Simulation.n=math.max(Simulation.n-1, 1);
     Simulation.initializeSimulation();
 };
-document.getElementById('increase_asset_count').onclick = Simulation.increaseAssetCount;
-document.getElementById('decrease_asset_count').onclick = Simulation.decreaseAssetCount;
+
+/*
+$.ajax({
+     url:"https://api.fitbit.com/1/user/-/activities/heart/date/today/1d.json",
+     dataType: 'json', // Notice! JSONP <-- P (lowercase)
+     success:function(json){
+         hr = json['activities-heart-intraday']['dataset'][json['activities-heart-intraday']['dataset'].length-1]['value']
+         console.log(hr)
+     },
+     error:function(){},
+     beforeSend: function (xhr) {
+        clientKey = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyM1FCWlkiLCJhdWQiOiIyMjdRVlIiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyaHIiLCJleHAiOjE1MDE2OTY5NTMsImlhdCI6MTQ3MDE2MTQyMH0.eNrQP1ylavOc8PHVIvivglrj7NvY39DrGmpAvUPVSH4'
+        xhr.setRequestHeader('Authorization', clientKey);
+     }
+});
+*/
