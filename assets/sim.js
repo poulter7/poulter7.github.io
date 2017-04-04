@@ -16,7 +16,7 @@
 var Simulation = {};
 
 Simulation.initialize = function () {
-    INITIAL_ASSET_COUNT = 3
+    INITIAL_ASSET_COUNT = 4
     this.entities = [];
     this.canvas = document.getElementById("canvas")
     this.ctx = this.canvas.getContext("2d");
@@ -141,7 +141,7 @@ Simulation.initialize();
 d3.interval(Simulation.run, 1000/Simulation.fps)
 
 document.getElementById('increase_asset_count').onclick = function(){
-    Simulation.n=math.min(Simulation.n+1, 5);
+    Simulation.n=math.min(Simulation.n+1, 10);
     Simulation.initializeSimulation();
 };
 document.getElementById('decrease_asset_count').onclick = function(){
