@@ -141,7 +141,7 @@ Simulation.initialize();
 d3.interval(Simulation.run, 1000/Simulation.fps)
 
 document.getElementById('increase_asset_count').onclick = function(){
-    Simulation.n=math.min(Simulation.n+1, 10);
+    Simulation.n=math.min(Simulation.n+1, 5);
     Simulation.initializeSimulation();
 };
 document.getElementById('decrease_asset_count').onclick = function(){
